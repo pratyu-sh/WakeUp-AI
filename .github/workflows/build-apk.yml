@@ -54,7 +54,7 @@ jobs:
       - name: Build Debug APK
         run: |
           cd artifacts/mockup-sandbox/android
-          ./gradlew assembleDebug
+          ./gradlew assembleDebug --stacktrace --no-daemon
 
       - name: Rename APK for Release
         run: |
