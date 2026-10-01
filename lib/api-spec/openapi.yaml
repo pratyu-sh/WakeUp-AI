@@ -2,14 +2,20 @@ openapi: 3.1.0
 info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
-  version: 0.1.0
-  description: API specification
+  version: 0.2.0
+  description: WakeUp-AI API specification
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: alarms
+    description: Alarm management
+  - name: workouts
+    description: Completed workout challenges
+  - name: stats
+    description: Aggregate user statistics
 paths:
   /healthz:
     get:
@@ -24,6 +30,159 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /alarms:
+    get:
+      operationId: listAlarms
+      tags: [alarms]
+      summary: List alarms
+      description: Returns all alarms, optionally filtered by enabled state
+      parameters:
+        - name: enabled
+          in: query
+          required: false
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Alarms
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Alarm"
+    post:
+      operationId: createAlarm
+      tags: [alarms]
+      summary: Create an alarm
+      description: Creates a new alarm
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AlarmInput"
+      responses:
+        "201":
+          description: Created alarm
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Alarm"
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorBody"
+  /alarms/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      operationId: getAlarm
+      tags: [alarms]
+      summary: Get an alarm
+      responses:
+        "200":
+          description: Alarm
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Alarm"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorBody"
+    patch:
+      operationId: updateAlarm
+      tags: [alarms]
+      summary: Update an alarm
+      description: Updates partial alarm fields
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AlarmUpdate"
+      responses:
+        "200":
+          description: Updated alarm
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Alarm"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorBody"
+    delete:
+      operationId: deleteAlarm
+      tags: [alarms]
+      summary: Delete an alarm
+      responses:
+        "204":
+          description: Deleted
+  /workouts:
+    get:
+      operationId: listWorkouts
+      tags: [workouts]
+      summary: List workouts
+      description: Returns recorded workouts, most recent first
+      responses:
+        "200":
+          description: Workouts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Workout"
+    post:
+      operationId: createWorkout
+      tags: [workouts]
+      summary: Record a workout
+      description: Records a completed workout challenge
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WorkoutInput"
+      responses:
+        "201":
+          description: Created workout
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Workout"
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorBody"
+  /stats:
+    get:
+      operationId: getStats
+      tags: [stats]
+      summary: Get aggregate stats
+      description: Computes streaks, totals, and scores from recorded workouts
+      responses:
+        "200":
+          description: Stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Stats"
 components:
   schemas:
     HealthStatus:
@@ -33,4 +192,267 @@ components:
           type: string
       required:
         - status
-
+    ErrorBody:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Human readable error message
+      required:
+        - message
+    RepeatType:
+      type: string
+      enum: [once, daily, weekdays, weekends, custom]
+    Exercise:
+      type: string
+      enum: [pushups, squats, burpees, plank]
+    Difficulty:
+      type: string
+      enum: [easy, medium, hard]
+    WorkoutResult:
+      type: string
+      enum: [completed, restarted, skipped, failed]
+    Alarm:
+      type: object
+      required:
+        - id
+        - time
+        - repeatType
+        - repeatDays
+        - exercise
+        - repetitions
+        - duration
+        - difficulty
+        - sound
+        - volume
+        - vibration
+        - gradualVolume
+        - enabled
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: string
+          format: uuid
+        time:
+          type: string
+          description: 24-hour time as HH:MM
+          pattern: "^([01]\\d|2[0-3]):[0-5]\\d$"
+        repeatType:
+          $ref: "#/components/schemas/RepeatType"
+        repeatDays:
+          type: array
+          description: 0 (Sunday) to 6 (Saturday); empty means "once"
+          items:
+            type: integer
+            minimum: 0
+            maximum: 6
+        exercise:
+          $ref: "#/components/schemas/Exercise"
+        repetitions:
+          type: integer
+          minimum: 1
+          maximum: 100
+        duration:
+          type: integer
+          description: Seconds (used for plank)
+          minimum: 10
+          maximum: 300
+        difficulty:
+          $ref: "#/components/schemas/Difficulty"
+        sound:
+          type: string
+        volume:
+          type: integer
+          minimum: 0
+          maximum: 100
+        vibration:
+          type: boolean
+        gradualVolume:
+          type: boolean
+        enabled:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    AlarmInput:
+      type: object
+      required:
+        - time
+        - repeatType
+        - repeatDays
+        - exercise
+        - repetitions
+        - duration
+        - difficulty
+        - sound
+        - volume
+        - vibration
+        - gradualVolume
+      properties:
+        time:
+          type: string
+          pattern: "^([01]\\d|2[0-3]):[0-5]\\d$"
+        repeatType:
+          $ref: "#/components/schemas/RepeatType"
+        repeatDays:
+          type: array
+          items:
+            type: integer
+        exercise:
+          $ref: "#/components/schemas/Exercise"
+        repetitions:
+          type: integer
+        duration:
+          type: integer
+        difficulty:
+          $ref: "#/components/schemas/Difficulty"
+        sound:
+          type: string
+        volume:
+          type: integer
+        vibration:
+          type: boolean
+        gradualVolume:
+          type: boolean
+        enabled:
+          type: boolean
+          default: true
+    AlarmUpdate:
+      type: object
+      description: Partial alarm fields; only provided fields are updated
+      properties:
+        time:
+          type: string
+          pattern: "^([01]\\d|2[0-3]):[0-5]\\d$"
+        repeatType:
+          $ref: "#/components/schemas/RepeatType"
+        repeatDays:
+          type: array
+          items:
+            type: integer
+        exercise:
+          $ref: "#/components/schemas/Exercise"
+        repetitions:
+          type: integer
+        duration:
+          type: integer
+        difficulty:
+          $ref: "#/components/schemas/Difficulty"
+        sound:
+          type: string
+        volume:
+          type: integer
+        vibration:
+          type: boolean
+        gradualVolume:
+          type: boolean
+        enabled:
+          type: boolean
+    Workout:
+      type: object
+      required:
+        - id
+        - exercise
+        - repsCompleted
+        - completed
+        - result
+        - startedAt
+      properties:
+        id:
+          type: string
+          format: uuid
+        alarmId:
+          type: string
+          format: uuid
+          nullable: true
+        exercise:
+          $ref: "#/components/schemas/Exercise"
+        repetitions:
+          type: integer
+          nullable: true
+        duration:
+          type: integer
+          nullable: true
+        difficulty:
+          $ref: "#/components/schemas/Difficulty"
+        repsCompleted:
+          type: integer
+        completed:
+          type: boolean
+        result:
+          $ref: "#/components/schemas/WorkoutResult"
+        startedAt:
+          type: string
+          format: date-time
+        completedAt:
+          type: string
+          format: date-time
+          nullable: true
+    WorkoutInput:
+      type: object
+      required:
+        - exercise
+        - repsCompleted
+        - completed
+        - result
+      properties:
+        alarmId:
+          type: string
+          format: uuid
+        exercise:
+          $ref: "#/components/schemas/Exercise"
+        repetitions:
+          type: integer
+        duration:
+          type: integer
+        difficulty:
+          $ref: "#/components/schemas/Difficulty"
+        repsCompleted:
+          type: integer
+        completed:
+          type: boolean
+        result:
+          $ref: "#/components/schemas/WorkoutResult"
+        completedAt:
+          type: string
+          format: date-time
+    Stats:
+      type: object
+      required:
+        - currentStreak
+        - bestStreak
+        - totalWorkouts
+        - totalPushups
+        - thisWeek
+        - completionRate
+        - avgTimeSec
+        - movementScore
+      properties:
+        currentStreak:
+          type: integer
+          description: Current consecutive-day workout streak
+        bestStreak:
+          type: integer
+          description: Longest consecutive-day workout streak
+        totalWorkouts:
+          type: integer
+        totalPushups:
+          type: integer
+          description: Push-ups performed in completed workouts
+        thisWeek:
+          type: integer
+          description: Completed workouts in the last 7 days
+        completionRate:
+          type: number
+          format: float
+          description: 0-100 percentage of workouts completed
+        avgTimeSec:
+          type: integer
+          description: Average challenge duration in seconds
+        movementScore:
+          type: integer
+          description: 0-100 weekly movement score

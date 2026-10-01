@@ -47,3 +47,9 @@ Thumbs.db
 # Replit
 .cache/
 .local/
+
+# Local Tools & Debug Files
+platform-tools/
+platform-tools-latest-windows.zip
+*.log
+phone_*.png

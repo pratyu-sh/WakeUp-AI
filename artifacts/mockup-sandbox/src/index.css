@@ -67,6 +67,28 @@
   --text-8xl--line-height: 1;
   --text-9xl: 8rem;
   --text-9xl--line-height: 1;
+
+  /* Aura Dark Design System Tokens */
+  --color-wakeup-950: #07060E;
+  --color-wakeup-900: #100D1F;
+  --color-wakeup-800: #1A162C;
+  --color-wakeup-700: #282044;
+  --color-wakeup-600: #604D91;
+  --color-wakeup-500: #8B5CF6;
+  --color-wakeup-400: #A855F7;
+  --color-wakeup-300: #C084FC;
+  --color-wakeup-200: #D4BBFC;
+  --color-wakeup-100: #EDE9FE;
+  --color-wakeup-lavender: #B0AFFA;
+  --color-wakeup-lavender-soft: #D4BBFC;
+  --color-wakeup-surface: #121020;
+  --color-wakeup-elevated: #1A162C;
+  --color-wakeup-btn-dark: #1C1832;
+  --color-wakeup-bg: #07060E;
+  --color-wakeup-text-secondary: #A796D9;
+  --color-wakeup-text-muted: #604D91;
+  --font-mono: 'DM Sans', monospace;
+  --font-number: 'DM Sans', sans-serif;
 }
 
 /* LIGHT MODE - Default theme with placeholder values */
@@ -78,42 +100,43 @@
   --elevate-1: rgba(0,0,0, .03);
   --elevate-2: rgba(0,0,0, .08);
 
-  --background: 0 0% 100%;
-  --foreground: 240 10% 3.9%;
-  --card: 0 0% 100%;
-  --card-foreground: 240 10% 3.9%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 240 10% 3.9%;
-  --primary: 240 5.9% 10%;
-  --primary-foreground: 0 0% 98%;
-  --secondary: 240 4.8% 95.9%;
-  --secondary-foreground: 240 5.9% 10%;
-  --muted: 240 4.8% 95.9%;
+  --background: 240 10% 3.9%;
+  --foreground: 0 0% 98%;
+  --card: 240 10% 3.9%;
+  --card-foreground: 0 0% 98%;
+  --popover: 240 10% 3.9%;
+  --popover-foreground: 0 0% 98%;
+  --primary: 0 0% 98%;
+  --primary-foreground: 240 5.9% 10%;
+  --secondary: 240 3.7% 15.9%;
+  --secondary-foreground: 0 0% 98%;
+  --muted: 240 3.7% 15.9%;
   --muted-foreground: 240 3.8% 46.1%;
   --accent: 240 4.8% 95.9%;
   --accent-foreground: 240 5.9% 10%;
   --destructive: 0 84.2% 60.2%;
   --destructive-foreground: 0 0% 98%;
-  --border: 240 5.9% 90%;
-  --input: 240 5.9% 90%;
+  --border: 240 3.7% 15.9%;
+  --input: 240 3.7% 15.9%;
   --ring: 240 5.9% 10%;
   --chart-1: 12 76% 61%;
   --chart-2: 173 58% 39%;
   --chart-3: 197 37% 24%;
   --chart-4: 43 74% 66%;
   --chart-5: 27 87% 67%;
-  --sidebar: 0 0% 98%;
-  --sidebar-foreground: 240 5.3% 26.1%;
-  --sidebar-primary: 240 5.9% 10%;
-  --sidebar-primary-foreground: 0 0% 98%;
-  --sidebar-accent: 240 4.8% 95.9%;
-  --sidebar-accent-foreground: 240 5.9% 10%;
-  --sidebar-border: 220 13% 91%;
-  --sidebar-ring: 240 5.9% 10%;
+  --sidebar: 240 5.9% 10%;
+  --sidebar-foreground: 240 4.8% 95.9%;
+  --sidebar-primary: 224.3 76.3% 48%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 240 3.7% 15.9%;
+  --sidebar-accent-foreground: 240 4.8% 95.9%;
+  --sidebar-border: 240 3.7% 15.9%;
+  --sidebar-ring: 240 4.9% 83.9%;
 
   --font-sans: 'Inter', sans-serif;
   --font-serif: Georgia, serif;
-  --font-mono: Menlo, monospace;
+  --font-mono: 'DM Sans', monospace;
+  --font-number: 'DM Sans', sans-serif;
   --radius: .5rem;
   --spacing: 0.25rem;
 }
@@ -159,6 +182,9 @@
   --sidebar-accent-foreground: 240 4.8% 95.9%;
   --sidebar-border: 240 3.7% 15.9%;
   --sidebar-ring: 240 4.9% 83.9%;
+
+  --font-mono: 'DM Sans', monospace;
+  --font-number: 'DM Sans', sans-serif;
 }
 
 @layer base {
@@ -166,11 +192,23 @@
     @apply border-border;
   }
   body {
-    @apply font-sans antialiased bg-background text-foreground;
+    background-color: #07060E;
+    color: #FFFFFF;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
   }
 }
 
 @layer utilities {
+  /* DM Sans for Numbers utility classes */
+  .font-number,
+  .font-numeric,
+  .font-numbers {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    font-feature-settings: 'tnum' on, 'lnum' on;
+    font-variant-numeric: tabular-nums;
+  }
+
   /* Hide ugly search cancel button in Chrome */
   input[type="search"]::-webkit-search-cancel-button {
     @apply hidden;
@@ -182,4 +220,134 @@
     color: hsl(var(--muted-foreground));
     pointer-events: none;
   }
+
+  /* Exact WakeUp AI Typography System */
+  .type-display {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 400;
+    font-size: 52px;
+    letter-spacing: -2px;
+    line-height: 52px;
+  }
+
+  .type-h1 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 500;
+    font-size: 32px;
+    letter-spacing: -0.8px;
+    line-height: 36px;
+  }
+
+  .type-body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    letter-spacing: 0px;
+    line-height: 27px;
+  }
+
+  .type-label {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 500;
+    font-size: 15px;
+    letter-spacing: 0px;
+    line-height: 20px;
+  }
+
+  .type-button {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 500;
+    font-size: 17px;
+    letter-spacing: -0.2px;
+    line-height: 22px;
+  }
+
+  .type-caption {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    letter-spacing: 0px;
+    line-height: 20px;
+  }
+
+  /* Futuristic Aura Dark Productivity System Utilities */
+  .bg-wakeup-ambient {
+    background: radial-gradient(
+      circle at 75% 15%,
+      rgba(109, 91, 239, 0.18) 0%,
+      rgba(36, 22, 94, 0.10) 35%,
+      #07060E 75%
+    );
+  }
+
+  .glass-card {
+    background: rgba(18, 16, 32, 0.90);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+  }
+
+  .glass-card-elevated {
+    background: rgba(26, 22, 44, 0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  }
+
+  .glass-strong {
+    background: rgba(14, 12, 26, 0.85);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+  }
+
+  .glow-purple {
+    box-shadow: 0 0 30px rgba(139, 92, 246, 0.25);
+  }
+
+  .glow-purple-strong {
+    box-shadow: 0 0 60px rgba(139, 92, 246, 0.35);
+  }
+
+  .glow-button {
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.6), inset 0 0 12px rgba(255, 255, 255, 0.05);
+  }
+
+  .btn-wakeup-primary {
+    background: #1C1832;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #FFFFFF;
+    border-radius: 999px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.6);
+    transition: all 0.15s ease;
+  }
+
+  .btn-wakeup-primary:hover {
+    background: #252042;
+  }
+
+  .btn-wakeup-secondary {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #FFFFFF;
+    border-radius: 999px;
+    transition: all 0.15s ease;
+  }
+
+  .btn-wakeup-secondary:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .input-glass {
+    height: 48px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.035);
+    border: 1px solid rgba(139, 92, 246, 0.35);
+    color: white;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
 }
+

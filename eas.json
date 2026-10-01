@@ -1,0 +1,34 @@
+{
+  "cli": {
+    "version": ">= 12.0.0"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "ios": {
+        "simulator": true
+      },
+      "env": {
+        "EXPO_PUBLIC_REVENUECAT_IOS_API_KEY": "appl_rc_public_ios_key_placeholder",
+        "EXPO_PUBLIC_REVENUECAT_ANDROID_API_KEY": "goog_rc_public_android_key_placeholder"
+      }
+    },
+    "preview": {
+      "distribution": "internal",
+      "env": {
+        "EXPO_PUBLIC_REVENUECAT_IOS_API_KEY": "appl_rc_public_ios_key_placeholder",
+        "EXPO_PUBLIC_REVENUECAT_ANDROID_API_KEY": "goog_rc_public_android_key_placeholder"
+      }
+    },
+    "production": {
+      "env": {
+        "EXPO_PUBLIC_REVENUECAT_IOS_API_KEY": "appl_rc_public_ios_key_placeholder",
+        "EXPO_PUBLIC_REVENUECAT_ANDROID_API_KEY": "goog_rc_public_android_key_placeholder"
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}
