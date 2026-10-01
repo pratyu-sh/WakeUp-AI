@@ -53,3 +53,4 @@ platform-tools/
 platform-tools-latest-windows.zip
 *.log
 phone_*.png
+*.apk
