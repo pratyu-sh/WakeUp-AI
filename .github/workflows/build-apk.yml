@@ -44,9 +44,7 @@ jobs:
         run: pnpm --filter @workspace/mockup-sandbox run build
 
       - name: Sync Capacitor Android
-        run: |
-          cd artifacts/mockup-sandbox
-          npx cap sync android
+        run: pnpm --filter @workspace/mockup-sandbox exec cap sync android
 
       - name: Make Gradle executable
         run: chmod +x artifacts/mockup-sandbox/android/gradlew
