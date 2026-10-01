@@ -3,7 +3,14 @@ import type { CapacitorConfig } from '@capacitor/cli';
 const config: CapacitorConfig = {
   appId: 'com.wakeupai.app',
   appName: 'WakeUp AI',
-  webDir: 'dist'
+  webDir: 'dist',
+  server: {
+    androidScheme: 'https',
+    cleartext: true
+  },
+  android: {
+    allowMixedContent: true
+  }
 };
 
 export default config;
