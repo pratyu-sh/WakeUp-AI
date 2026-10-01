@@ -11,6 +11,7 @@
     "test": "node --import ../../scripts/node_modules/tsx/dist/loader.mjs --test \"src/features/**/*.test.ts\""
   },
   "devDependencies": {
+    "@capacitor/cli": "^8.5.2",
     "@hookform/resolvers": "^3.10.0",
     "@radix-ui/react-accordion": "^1.2.20",
     "@radix-ui/react-alert-dialog": "^1.1.23",
@@ -71,5 +72,9 @@
     "vaul": "^1.1.2",
     "vite": "catalog:",
     "zod": "catalog:"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.5.2",
+    "@capacitor/core": "^8.5.2"
   }
 }
